@@ -26,8 +26,28 @@ class ViewController: UIViewController {
                 debugPrint("We got a failure trying to get the Data. The error: \(error.localizedDescription)")
             }
          }
+
         
     }
+    
+    @IBAction func saveCertificateTapped(_ sender: Any) {
+        shareCertificate()
+    }
+    
+    func shareCertificate() {
+        let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+           let filePath = documentsPath.appendingPathComponent("serverCertificate.cer")
+           
+           let activityViewController = UIActivityViewController(activityItems: [filePath], applicationActivities: nil)
+           
+           if let popoverController = activityViewController.popoverPresentationController {
+               popoverController.sourceView = self.view
+               popoverController.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.midY, width: 0, height: 0)
+               popoverController.permittedArrowDirections = []
+           }
+           
+           present(activityViewController, animated: true, completion: nil)
+       }
 
 
 }
