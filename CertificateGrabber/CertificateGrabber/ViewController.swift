@@ -15,6 +15,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        view.backgroundColor = .white
         guard let url = URL(string: "https://iis01.exas2030.com/qPMO_EmpV2.0.04/api/Dashboard/v1/AssestData/OTPPageAndCaptcha_Status_APP?culture=en-sa") else { fatalError("Invalid URL") }
         
      
