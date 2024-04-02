@@ -68,19 +68,32 @@ class NetworkManagerDelegate: NSObject, URLSessionDelegate {
         
         if challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust {
                 if let serverTrust = challenge.protectionSpace.serverTrust {
-                    // Retrieve the server's certificate
     
                     if let serverCertificate = SecTrustGetCertificateAtIndex(serverTrust, 0) {
-                        let serverCertificateData = SecCertificateCopyData(serverCertificate)
-                        // Convert the certificate to data format
-                        let serverCertificateString = serverCertificateData as Data
-                        print(serverCertificateData, "🙌")
+
+                        if let serverCertificateData = SecCertificateCopyData(serverCertificate) as Data? {
+                            print(serverCertificateData, "🙌")
+
+                            saveCertificateToDocumentDirectory(certificateData: serverCertificateData)
+                        }
                     }
                 }
             }
             
             completionHandler(.performDefaultHandling, nil)
     }
+    
+    func saveCertificateToDocumentDirectory(certificateData: Data) {
+         let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+         let filePath = documentsPath.appendingPathComponent("serverCertificate.cer")
+         
+         do {
+             try certificateData.write(to: filePath)
+             print("Certificate saved to: \(filePath)")
+         } catch {
+             print("Error saving certificate: \(error)")
+         }
+     }
     
     
 }
